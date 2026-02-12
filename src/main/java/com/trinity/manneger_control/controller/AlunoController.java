@@ -1,0 +1,46 @@
+package com.trinity.manneger_control.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.trinity.manneger_control.entity.Aluno;
+import com.trinity.manneger_control.service.AlunoServiceImpl;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/alunos")
+@RequiredArgsConstructor
+public class AlunoController {
+
+    private final AlunoServiceImpl alunoService;
+
+    @PostMapping
+    public ResponseEntity<Aluno> criar(@RequestBody Aluno aluno) {
+        return ResponseEntity.ok(alunoService.criar(aluno));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Aluno>> listarTodos() {
+        return ResponseEntity.ok(alunoService.listarTodos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Aluno> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(alunoService.buscarPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Aluno> atualizar(@PathVariable Long id,
+            @RequestBody Aluno aluno) {
+        return ResponseEntity.ok(alunoService.atualizar(id, aluno));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        alunoService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+}
