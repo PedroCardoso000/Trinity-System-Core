@@ -2,6 +2,7 @@ package com.trinity.manneger_control.interfaces;
 
 import java.util.List;
 
+import com.trinity.manneger_control.domain.Faixas;
 import com.trinity.manneger_control.entity.Aluno;
 
 public interface AlunoInterface {
@@ -14,4 +15,9 @@ public interface AlunoInterface {
     Aluno atualizar(Long id, Aluno alunoAtualizado);
 
     void deletar(Long id);
+
+    Aluno updateQuantidadeGraus(Long id, Integer quantidadeGraus);
+
+    Aluno updateFaixa(Long id, Faixas faixaEtaria);
+    
 }

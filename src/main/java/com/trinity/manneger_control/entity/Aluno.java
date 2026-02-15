@@ -1,5 +1,7 @@
 package com.trinity.manneger_control.entity;
 
+import com.trinity.manneger_control.domain.Faixas;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,29 +27,27 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Dados principais
-    @Column(nullable = false)
+    @Column(nullable = false, comment = "Nome do aluno")
     private String nome;
 
-    @Column(nullable = false, unique = true, comment = "Email do Aluno inválido")
+    @Column(nullable = false, unique = true, comment = "Email do aluno")
     private String email;
-    
-    private String telefone;
 
-    @Column(name = "ano_inicio")
+    private String telefone;
     private Integer anoInicioNaTrinity;
 
-    @Column(nullable = false, comment = "Faixa do Aluno inválida")
-    private String faixa;
+    @Column(nullable = false, comment = "Faixa etária do aluno")
+    private Faixas faixa;
 
-    @Column(name = "quantidade_graus")
     private Integer quantidadeGraus;
 
-    // Status (ativo / inativo)
-    @Column(nullable = false, comment = "Status do Aluno inválido")
+    @Column(nullable = false, comment = "Indica se o aluno está ativo na Trinity")
     private Boolean ativo;
 
-    @Column(name = "user_id", unique = true)
     private Long userId;
+
+    // Apenas referência
+    @Column(nullable = false, comment = "ID da branch à qual o aluno está associado")
+    private Long branchId;
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.trinity.manneger_control.domain.Faixas;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.interfaces.AlunoInterface;
 import com.trinity.manneger_control.repository.AlunoRepository;
@@ -54,5 +55,34 @@ public class AlunoServiceImpl implements AlunoInterface {
     public void deletar(Long id) {
         Aluno aluno = buscarPorId(id);
         alunoRepository.delete(aluno);
+    }
+
+    @Override
+    public Aluno updateQuantidadeGraus(Long id, Integer quantidadeGraus) {
+        Integer quantidadeGrausVerificada = verifyQuantidadeGraus(id, quantidadeGraus);
+        Aluno alunoExistente = buscarPorId(id);
+        alunoExistente.setQuantidadeGraus(quantidadeGrausVerificada);
+        return alunoRepository.save(alunoExistente);
+    }
+
+    @Override
+    public Aluno updateFaixa(Long id, Faixas faixaEtaria) {
+        Aluno alunoExistente = buscarPorId(id);
+        alunoExistente.setFaixa(faixaEtaria);
+        return alunoRepository.save(alunoExistente);
+    }
+
+    public Integer verifyQuantidadeGraus(Long id, Integer quantidadeGraus) {
+        Aluno aluno = buscarPorId(id);
+        switch (aluno.getFaixa()) {
+            case PRETA:
+                if (aluno.getQuantidadeGraus() > 6)
+                    throw new IllegalArgumentException("Alunos pretos não podem ter graus");
+                return aluno.getQuantidadeGraus() + 1;
+            default:
+                if (quantidadeGraus == 4 && aluno.getQuantidadeGraus() == 4)
+                    throw new IllegalArgumentException("Aluno já atingiu o máximo de graus");
+                return aluno.getQuantidadeGraus() + 1;
+        }
     }
 }
