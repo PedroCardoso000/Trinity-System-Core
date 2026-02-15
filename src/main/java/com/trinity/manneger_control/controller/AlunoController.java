@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.trinity.manneger_control.domain.Faixas;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.service.AlunoServiceImpl;
 
@@ -42,5 +43,17 @@ public class AlunoController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         alunoService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/quantidade-graus")
+    public ResponseEntity<Aluno> updateQuantidadeGraus(@PathVariable Long id,
+            @RequestParam Integer quantidadeGraus) {
+        return ResponseEntity.ok(alunoService.updateQuantidadeGraus(id, quantidadeGraus));
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<Aluno> updateFaixa(@PathVariable Long id,
+            @RequestParam Faixas faixaEtaria) {
+        return ResponseEntity.ok(alunoService.updateFaixa(id, faixaEtaria));
     }
 }
