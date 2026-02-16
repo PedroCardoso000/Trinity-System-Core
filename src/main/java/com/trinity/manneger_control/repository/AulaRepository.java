@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.trinity.manneger_control.entity.Aluno;
+import com.trinity.manneger_control.entity.Aula;
 
 @Repository
-public interface AlunoRepository extends JpaRepository<Aluno, Long> {
-    List<Aluno> findByBranchId(Long branchId);
+public interface AulaRepository extends JpaRepository<Aula, Long> {
+
+    List<Aula> findByBranchId(Long branchId);
+
 }
