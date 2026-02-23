@@ -31,4 +31,6 @@ public class Branch {
     private String phone;
     @Column(nullable = false, comment = "Indica se a branch está ativa")
     private Boolean active;
+    @Column
+    private Long academicId;
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.trinity.manneger_control.entity.Branch;
 import com.trinity.manneger_control.interfaces.BranchInterface;
+import com.trinity.manneger_control.repository.AcademicRepository;
 import com.trinity.manneger_control.repository.BranchRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchInterface {
     private final BranchRepository branchRepository;
+    private final AcademicRepository academicRepository;
 
     @Override
     public Branch criar(Branch branch) {
+
+        if (!academicRepository.existsById(branch.getAcademicId())) {
+            throw new RuntimeException("Academic não encontrada");
+        }
+
         return branchRepository.save(branch);
     }
 
