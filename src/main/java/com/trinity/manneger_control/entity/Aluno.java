@@ -50,4 +50,7 @@ public class Aluno {
     @Column(nullable = false, comment = "ID da branch à qual o aluno está associado")
     private Long branchId;
 
+    @Column(nullable = false, comment = "ID do academic à qual o aluno está associado")
+    private Long academicId;
+
 }

@@ -19,7 +19,9 @@ public class AlunoEventPublisher {
         AlunoCreatedEvent event = new AlunoCreatedEvent(
                 aluno.getId(),
                 aluno.getEmail(),
-                aluno.getNome()
+                aluno.getNome(),
+                aluno.getAcademicId(),
+                aluno.getBranchId()
         );
 
         rabbitTemplate.convertAndSend(

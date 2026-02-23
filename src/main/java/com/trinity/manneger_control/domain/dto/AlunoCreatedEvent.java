@@ -12,4 +12,6 @@ public class AlunoCreatedEvent {
     private Long alunoId;
     private String email;
     private String nome;
+    private Long academicId;
+    private Long branchId;
 }
