@@ -18,10 +18,8 @@ public class AcademicCreatedListener {
     @RabbitListener(queues = RabbitMQConfig.ACADEMIC_QUEUE)
     public void handle(AcademicCreatedEvent event) {
 
-        Academic academic = Academic.builder()
-                .id(event.getAcademicId())
-                .name(event.getName())
-                .build();
+        Academic academic = new Academic();
+        academic.setName(event.getName());
 
         academicRepository.save(academic);
     }
