@@ -49,12 +49,14 @@ public class AttendanceServiceImpl {
             throw new RuntimeException("Check-in já realizado");
         });
 
-        Attendance attendance = Attendance.builder()
-                .alunoId(aluno.getId())
-                .aulaId(aula.getId())
-                .status(AttendanceStatus.PRESENT)
-                .checkInTime(LocalDateTime.now())
-                .build();
+        Attendance attendance = new Attendance(
+                null,
+                aluno.getId(),
+                aula.getId(),
+                AttendanceStatus.PRESENT,
+                LocalDateTime.now()
+        );
+
 
         attendanceRepository.save(attendance);
 

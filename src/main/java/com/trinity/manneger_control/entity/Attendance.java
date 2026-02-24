@@ -25,7 +25,6 @@ import jakarta.persistence.UniqueConstraint;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Attendance {
 
     @Id
