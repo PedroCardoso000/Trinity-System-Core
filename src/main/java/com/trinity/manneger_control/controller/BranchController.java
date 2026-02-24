@@ -2,9 +2,12 @@ package com.trinity.manneger_control.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.trinity.manneger_control.domain.dto.ResponseResult;
 import com.trinity.manneger_control.entity.Branch;
 import com.trinity.manneger_control.service.BranchServiceImpl;
 
@@ -16,9 +19,10 @@ import lombok.RequiredArgsConstructor;
 public class BranchController {
     private final BranchServiceImpl branchService;
 
+
     @PostMapping
-    public ResponseEntity<Branch> criar(@RequestBody Branch branch) {
-        return ResponseEntity.ok(branchService.criar(branch));
+    public ResponseEntity<ResponseResult> criar(@RequestBody Branch branch) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(branchService.criar(branch));
     }
 
     @GetMapping

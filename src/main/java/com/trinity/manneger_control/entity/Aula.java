@@ -34,5 +34,8 @@ public class Aula {
     // Referência simples
     @Column(nullable = false)
     private Long branchId;
-}
 
+    // Referência simples
+    @Column(nullable = false)
+    private Long academicId;
+}

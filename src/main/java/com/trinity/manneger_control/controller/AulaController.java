@@ -66,7 +66,6 @@ public class AulaController {
     public ResponseEntity<List<Attendance>> getAttendanceByAulaId(
             @PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                aulaServiceImpl.getAttendanceByAulaId(id));
+        return ResponseEntity.ok(aulaServiceImpl.getAttendanceByAulaId(id));
     }
 }

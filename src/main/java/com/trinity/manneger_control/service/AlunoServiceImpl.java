@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.trinity.manneger_control.domain.Faixas;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.interfaces.AlunoInterface;
+import com.trinity.manneger_control.rabbitmq.AlunoEventPublisher;
 import com.trinity.manneger_control.repository.AlunoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,18 @@ import lombok.RequiredArgsConstructor;
 public class AlunoServiceImpl implements AlunoInterface {
 
     private final AlunoRepository alunoRepository;
+    private final AlunoEventPublisher alunoEventPublisher;
 
     @Override
     public Aluno criar(Aluno aluno) {
         aluno.setId(null);
-        return alunoRepository.save(aluno);
+        aluno.setUserId(null);
+
+        Aluno saved = alunoRepository.save(aluno);
+
+        alunoEventPublisher.publishAlunoCreated(saved);
+
+        return saved;
     }
 
     @Override
