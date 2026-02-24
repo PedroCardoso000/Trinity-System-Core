@@ -46,8 +46,8 @@ public class AttendanceServiceImpl {
         attendanceRepository.findByAlunoIdAndAulaId(
                 request.getAlunoId(),
                 request.getAulaId()).ifPresent(a -> {
-                    throw new RuntimeException("Check-in já realizado");
-                });
+            throw new RuntimeException("Check-in já realizado");
+        });
 
         Attendance attendance = Attendance.builder()
                 .alunoId(aluno.getId())
@@ -58,13 +58,15 @@ public class AttendanceServiceImpl {
 
         attendanceRepository.save(attendance);
 
-        return AttendanceResponse.builder()
-                .id(attendance.getId())
-                .alunoId(attendance.getAlunoId())
-                .aulaId(attendance.getAulaId())
-                .status(attendance.getStatus().name())
-                .checkInTime(attendance.getCheckInTime())
-                .build();
+
+        return new AttendanceResponse(
+                attendance.getId(),
+                attendance.getAlunoId(),
+                attendance.getAulaId(),
+                attendance.getStatus().name(),
+                attendance.getCheckInTime()
+        );
+
     }
 
     public void marcarFalta(Long alunoId, Long aulaId) {
