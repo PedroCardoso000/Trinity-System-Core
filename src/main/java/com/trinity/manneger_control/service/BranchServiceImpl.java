@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.trinity.manneger_control.domain.dto.ResponseResult;
 import com.trinity.manneger_control.entity.Branch;
 import com.trinity.manneger_control.interfaces.BranchInterface;
 import com.trinity.manneger_control.repository.AcademicRepository;
@@ -18,13 +19,20 @@ public class BranchServiceImpl implements BranchInterface {
     private final AcademicRepository academicRepository;
 
     @Override
-    public Branch criar(Branch branch) {
+    public ResponseResult criar(Branch branch) {
+        ResponseResult responseResult = null;
+        try {
+            if (!academicRepository.existsById(branch.getAcademicId())) {
+                throw new RuntimeException("Academic não encontrada");
+            }
 
-        if (!academicRepository.existsById(branch.getAcademicId())) {
-            throw new RuntimeException("Academic não encontrada");
+            branchRepository.save(branch);
+            responseResult = new ResponseResult(true, "Branch criada com sucesso");
+            return responseResult;
+        } catch (Exception e) {
+            responseResult = new ResponseResult(false, e.getMessage());
+            return responseResult;
         }
-
-        return branchRepository.save(branch);
     }
 
     @Override
