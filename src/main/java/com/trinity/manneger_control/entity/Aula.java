@@ -15,7 +15,6 @@ import jakarta.persistence.Column;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Aula {
 
     @Id

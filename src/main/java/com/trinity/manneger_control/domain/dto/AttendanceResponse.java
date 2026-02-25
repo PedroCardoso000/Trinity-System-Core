@@ -1,12 +1,16 @@
 package com.trinity.manneger_control.domain.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-import lombok.Getter;
-import lombok.Builder;
-
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public class AttendanceResponse {
     private Long id;
     private Long alunoId;

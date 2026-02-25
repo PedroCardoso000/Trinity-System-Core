@@ -14,7 +14,6 @@ import jakarta.persistence.Column;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

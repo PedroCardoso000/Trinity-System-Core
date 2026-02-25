@@ -46,25 +46,30 @@ public class AttendanceServiceImpl {
         attendanceRepository.findByAlunoIdAndAulaId(
                 request.getAlunoId(),
                 request.getAulaId()).ifPresent(a -> {
-                    throw new RuntimeException("Check-in já realizado");
-                });
+            throw new RuntimeException("Check-in já realizado");
+        });
 
-        Attendance attendance = Attendance.builder()
-                .alunoId(aluno.getId())
-                .aulaId(aula.getId())
-                .status(AttendanceStatus.PRESENT)
-                .checkInTime(LocalDateTime.now())
-                .build();
+        Attendance attendance = new Attendance();
+
+        attendance.setAlunoId(aluno.getId());
+        attendance.setAulaId(aula.getId());
+        attendance.setStatus(AttendanceStatus.PRESENT);
+        attendance.setCheckInTime(LocalDateTime.now());
 
         attendanceRepository.save(attendance);
 
-        return AttendanceResponse.builder()
-                .id(attendance.getId())
-                .alunoId(attendance.getAlunoId())
-                .aulaId(attendance.getAulaId())
-                .status(attendance.getStatus().name())
-                .checkInTime(attendance.getCheckInTime())
-                .build();
+
+        AttendanceResponse attendanceResponse = new AttendanceResponse();
+
+        attendanceResponse.setId(attendance.getId());
+        attendanceResponse.setAlunoId(attendance.getAlunoId());
+        attendanceResponse.setAulaId(attendance.getAulaId());
+        attendanceResponse.setStatus(attendance.getStatus().name());
+        attendanceResponse.setCheckInTime(attendance.getCheckInTime());
+
+
+        return attendanceResponse;
+
     }
 
     public void marcarFalta(Long alunoId, Long aulaId) {

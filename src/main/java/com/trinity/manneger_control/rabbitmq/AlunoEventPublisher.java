@@ -16,13 +16,13 @@ public class AlunoEventPublisher {
 
     public void publishAlunoCreated(Aluno aluno) {
 
-        AlunoCreatedEvent event = new AlunoCreatedEvent(
-                aluno.getId(),
-                aluno.getEmail(),
-                aluno.getNome(),
-                aluno.getAcademicId(),
-                aluno.getBranchId()
-        );
+        AlunoCreatedEvent event = new AlunoCreatedEvent();
+
+        event.setAlunoId(aluno.getId());
+        event.setEmail(aluno.getEmail());
+        event.setNome(aluno.getNome());
+        event.setAcademicId(aluno.getAcademicId());
+        event.setBranchId(aluno.getBranchId());
 
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.ALUNO_EXCHANGE,
