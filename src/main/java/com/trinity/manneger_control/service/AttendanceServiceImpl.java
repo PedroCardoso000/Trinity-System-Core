@@ -49,25 +49,26 @@ public class AttendanceServiceImpl {
             throw new RuntimeException("Check-in já realizado");
         });
 
-        Attendance attendance = new Attendance(
-                null,
-                aluno.getId(),
-                aula.getId(),
-                AttendanceStatus.PRESENT,
-                LocalDateTime.now()
-        );
+        Attendance attendance = new Attendance();
 
+        attendance.setAlunoId(aluno.getId());
+        attendance.setAulaId(aula.getId());
+        attendance.setStatus(AttendanceStatus.PRESENT);
+        attendance.setCheckInTime(LocalDateTime.now());
 
         attendanceRepository.save(attendance);
 
 
-        return new AttendanceResponse(
-                attendance.getId(),
-                attendance.getAlunoId(),
-                attendance.getAulaId(),
-                attendance.getStatus().name(),
-                attendance.getCheckInTime()
-        );
+        AttendanceResponse attendanceResponse = new AttendanceResponse();
+
+        attendanceResponse.setId(attendance.getId());
+        attendanceResponse.setAlunoId(attendance.getAlunoId());
+        attendanceResponse.setAulaId(attendance.getAulaId());
+        attendanceResponse.setStatus(attendance.getStatus().name());
+        attendanceResponse.setCheckInTime(attendance.getCheckInTime());
+
+
+        return attendanceResponse;
 
     }
 
