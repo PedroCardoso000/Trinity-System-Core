@@ -10,4 +10,5 @@ import com.trinity.manneger_control.entity.Aluno;
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     List<Aluno> findByBranchId(Long branchId);
+    long countByActiveTrue();
 }

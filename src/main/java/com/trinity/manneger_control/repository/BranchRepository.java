@@ -7,5 +7,5 @@ import com.trinity.manneger_control.entity.Branch;
 
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, Long> {
-    
+    long countByActiveTrue();
 }
