@@ -56,4 +56,19 @@ public class AlunoController {
             @RequestParam Faixas faixaEtaria) {
         return ResponseEntity.ok(alunoService.updateFaixa(id, faixaEtaria));
     }
+
+    // Listar por Academia
+    @GetMapping("/academia/{academiaId}")
+    public ResponseEntity<List<Aluno>> getAlunosByAcademiaId(
+            @PathVariable Long academiaId) {
+        return ResponseEntity.ok(alunoService.getAlunosByAcademiaId(academiaId));
+    }
+    
+    // Listar por Branch - Academia
+        @GetMapping("/branch/{branchId}/academia/{academiaId}")
+    public ResponseEntity<List<Aluno>> getAlunosByBranchIdAndAcademiaId(
+            @PathVariable Long branchId,
+            @PathVariable Long academiaId) {
+        return ResponseEntity.ok(alunoService.getAlunosByBranchIdAndAcademiaId(branchId, academiaId));
+    }
 }

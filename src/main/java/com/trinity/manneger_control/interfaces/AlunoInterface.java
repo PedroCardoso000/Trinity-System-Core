@@ -19,5 +19,9 @@ public interface AlunoInterface {
     Aluno updateQuantidadeGraus(Long id, Integer quantidadeGraus);
 
     Aluno updateFaixa(Long id, Faixas faixaEtaria);
-    
+
+    List<Aluno> getAlunosByAcademiaId(Long academiaId);
+
+    List<Aluno> getAlunosByBranchIdAndAcademiaId(Long branchId, Long academiaId);
+
 }

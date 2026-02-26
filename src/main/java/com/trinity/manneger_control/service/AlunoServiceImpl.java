@@ -93,4 +93,14 @@ public class AlunoServiceImpl implements AlunoInterface {
                 return aluno.getQuantidadeGraus() + 1;
         }
     }
+
+	@Override
+	public List<Aluno> getAlunosByAcademiaId(Long academiaId) {
+		return alunoRepository.findByAcademiaId(academiaId);
+	}
+
+	@Override
+	public List<Aluno> getAlunosByBranchIdAndAcademiaId(Long branchId, Long academiaId) {
+		return alunoRepository.findByBranchIdAndAcademiaId(branchId, academiaId);
+	}
 }
