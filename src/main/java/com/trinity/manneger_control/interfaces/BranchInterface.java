@@ -15,4 +15,6 @@ public interface BranchInterface {
     Branch atualizar(Long id, Branch branchAtualizado);
 
     void deletar(Long id);
+
+    List<Branch> buscarPorIdAcademia(Long idAcademia);
 }

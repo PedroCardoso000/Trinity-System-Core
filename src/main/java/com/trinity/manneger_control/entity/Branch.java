@@ -24,6 +24,7 @@ public class Branch {
     @Column(nullable = false, comment = "Cidade da branch")
     private String city;
     private String state;
+    private String number;
     private String country;
     @Column(nullable = false, comment = "Código postal da branch")
     private String zipCode;
