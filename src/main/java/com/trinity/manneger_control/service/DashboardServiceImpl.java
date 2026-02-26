@@ -14,12 +14,20 @@ public class DashboardServiceImpl implements DashboardInterface {
     private final BranchRepository branchRepository;
 
     @Override
-    public long listarTodosAlunosAtivos() {
-        return alunoRepository.countByActiveTrue();
+    public long listarTodosAlunosAtivos(Long academicId) {
+
+        if (academicId == null) {
+            throw new IllegalArgumentException("Academic ID cannot be null");
+        }
+        return alunoRepository.countByAtivoTrueAndAcademicId(academicId);
     }
 
     @Override
-    public long listarTodasFiliaisAtivas() {
-        return branchRepository.countByActiveTrue();
+    public long listarTodasFiliaisAtivas(Long academicId) {
+
+        if (academicId == null) {
+            throw new IllegalArgumentException("Academic ID cannot be null");
+        }
+        return branchRepository.countByActiveTrueAndAcademicId(academicId);
     }
 }

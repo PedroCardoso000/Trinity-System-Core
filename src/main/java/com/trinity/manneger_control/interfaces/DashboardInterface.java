@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface DashboardInterface {
 
-    long listarTodosAlunosAtivos();
+    long listarTodosAlunosAtivos(Long academicId);
 
-    long listarTodasFiliaisAtivas();
+    long listarTodasFiliaisAtivas(Long academicId);
 
 }

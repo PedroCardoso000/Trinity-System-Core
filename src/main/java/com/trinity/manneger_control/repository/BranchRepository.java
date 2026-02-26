@@ -7,5 +7,7 @@ import com.trinity.manneger_control.entity.Branch;
 
 @Repository
 public interface BranchRepository extends JpaRepository<Branch, Long> {
-    long countByActiveTrue();
+
+    // Conta quantas filiais ativas pertencem ao mesmo Academic
+    long countByActiveTrueAndAcademicId(Long academicId);
 }
