@@ -52,6 +52,7 @@ public class BranchServiceImpl implements BranchInterface {
         branch.setAddress(branchAtualizado.getAddress());
         branch.setCity(branchAtualizado.getCity());
         branch.setState(branchAtualizado.getState());
+        branch.setNumber(branchAtualizado.getNumber());
         branch.setCountry(branchAtualizado.getCountry());
         branch.setZipCode(branchAtualizado.getZipCode());
         branch.setPhone(branchAtualizado.getPhone());
@@ -62,5 +63,10 @@ public class BranchServiceImpl implements BranchInterface {
     @Override
     public void deletar(Long id) {
         branchRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Branch> buscarPorIdAcademia(Long idAcademia) {
+        return branchRepository.findByAcademicId(idAcademia);
     }
 }

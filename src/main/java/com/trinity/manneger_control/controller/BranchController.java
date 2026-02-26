@@ -3,7 +3,6 @@ package com.trinity.manneger_control.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class BranchController {
     private final BranchServiceImpl branchService;
 
-
     @PostMapping
     public ResponseEntity<ResponseResult> criar(@RequestBody Branch branch) {
         return ResponseEntity.status(HttpStatus.CREATED).body(branchService.criar(branch));
@@ -33,6 +31,11 @@ public class BranchController {
     @GetMapping("/{id}")
     public ResponseEntity<Branch> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(branchService.buscarPorId(id));
+    }
+
+    @GetMapping("/academic/{idAcademia}")
+    public ResponseEntity<List<Branch>> buscarPorIdAcademia(@PathVariable Long idAcademia) {
+        return ResponseEntity.ok(branchService.buscarPorIdAcademia(idAcademia));
     }
 
     @PutMapping("/{id}")
