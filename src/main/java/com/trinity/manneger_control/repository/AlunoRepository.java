@@ -11,7 +11,7 @@ import com.trinity.manneger_control.entity.Aluno;
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     List<Aluno> findByBranchId(Long branchId);
 
-    List<Aluno> findByBranchIdAndAcademiaId(Long branchId, Long academiaId);
+    List<Aluno> findByBranchIdAndAcademicId(Long branchId, Long academiaId);
 
-    List<Aluno> findByAcademiaId(Long academiaId);
+    List<Aluno> findByAcademicId(Long academicId);
 }

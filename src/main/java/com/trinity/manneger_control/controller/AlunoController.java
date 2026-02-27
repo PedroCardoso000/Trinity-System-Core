@@ -63,9 +63,9 @@ public class AlunoController {
             @PathVariable Long academiaId) {
         return ResponseEntity.ok(alunoService.getAlunosByAcademiaId(academiaId));
     }
-    
+
     // Listar por Branch - Academia
-        @GetMapping("/branch/{branchId}/academia/{academiaId}")
+    @GetMapping("/branch/{branchId}/academia/{academiaId}")
     public ResponseEntity<List<Aluno>> getAlunosByBranchIdAndAcademiaId(
             @PathVariable Long branchId,
             @PathVariable Long academiaId) {

@@ -96,11 +96,11 @@ public class AlunoServiceImpl implements AlunoInterface {
 
 	@Override
 	public List<Aluno> getAlunosByAcademiaId(Long academiaId) {
-		return alunoRepository.findByAcademiaId(academiaId);
+		return alunoRepository.findByAcademicId(academiaId);
 	}
 
 	@Override
 	public List<Aluno> getAlunosByBranchIdAndAcademiaId(Long branchId, Long academiaId) {
-		return alunoRepository.findByBranchIdAndAcademiaId(branchId, academiaId);
+		return alunoRepository.findByBranchIdAndAcademicId(branchId, academiaId);
 	}
 }
