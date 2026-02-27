@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class AttendanceResponse {
     private Long id;
     private Long alunoId;
-    private Long aulaId;
+    private Long classRoomId;
     private String status;
     private LocalDateTime checkInTime;
 }

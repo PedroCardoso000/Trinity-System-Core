@@ -10,12 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "aula")
+@Table(name = "classRoom")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Aula {
+public class ClassRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

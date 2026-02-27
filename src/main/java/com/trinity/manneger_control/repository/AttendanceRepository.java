@@ -11,9 +11,9 @@ import com.trinity.manneger_control.entity.Attendance;
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
-    Optional<Attendance> findByAlunoIdAndAulaId(Long alunoId, Long aulaId);
+    Optional<Attendance> findByAlunoIdAndClassRoomId(Long alunoId, Long classRoomId);
 
-    List<Attendance> findByAulaId(Long aulaId);
+    List<Attendance> findByClassRoomId(Long classRoomId);
 
     List<Attendance> findByAlunoId(Long alunoId);
 }

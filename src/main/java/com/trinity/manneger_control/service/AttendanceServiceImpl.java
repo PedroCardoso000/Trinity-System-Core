@@ -10,10 +10,10 @@ import com.trinity.manneger_control.domain.dto.AttendanceResponse;
 import com.trinity.manneger_control.domain.dto.CheckInRequest;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.entity.Attendance;
-import com.trinity.manneger_control.entity.Aula;
+import com.trinity.manneger_control.entity.ClassRoom;
 import com.trinity.manneger_control.repository.AlunoRepository;
 import com.trinity.manneger_control.repository.AttendanceRepository;
-import com.trinity.manneger_control.repository.AulaRepository;
+import com.trinity.manneger_control.repository.ClassRoomRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +22,15 @@ import lombok.RequiredArgsConstructor;
 public class AttendanceServiceImpl {
     private final AttendanceRepository attendanceRepository;
     private final AlunoRepository alunoRepository;
-    private final AulaRepository aulaRepository;
+    private final ClassRoomRepository classRoomRepository;
 
     public AttendanceResponse checkIn(CheckInRequest request) {
 
         Aluno aluno = alunoRepository.findById(request.getAlunoId())
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
-        Aula aula = aulaRepository.findById(request.getAulaId())
-                .orElseThrow(() -> new RuntimeException("Aula não encontrada"));
+        ClassRoom classRoom = classRoomRepository.findById(request.getClassRoomId())
+                .orElseThrow(() -> new RuntimeException("Sala de aula não encontrada"));
 
         // Regra 1: aluno precisa estar ativo
         if (!aluno.getAtivo()) {
@@ -38,21 +38,21 @@ public class AttendanceServiceImpl {
         }
 
         // Regra 2: aluno deve pertencer à mesma branch da aula
-        if (!aluno.getBranchId().equals(aula.getBranchId())) {
+        if (!aluno.getBranchId().equals(classRoom.getBranchId())) {
             throw new RuntimeException("Aluno não pertence à filial da aula");
         }
 
         // Regra 3: não permitir check-in duplicado
-        attendanceRepository.findByAlunoIdAndAulaId(
+        attendanceRepository.findByAlunoIdAndClassRoomId(
                 request.getAlunoId(),
-                request.getAulaId()).ifPresent(a -> {
+                request.getClassRoomId()).ifPresent(a -> {
             throw new RuntimeException("Check-in já realizado");
         });
 
         Attendance attendance = new Attendance();
 
         attendance.setAlunoId(aluno.getId());
-        attendance.setAulaId(aula.getId());
+        attendance.setAulaId(classRoom.getId());
         attendance.setStatus(AttendanceStatus.PRESENT);
         attendance.setCheckInTime(LocalDateTime.now());
 
@@ -63,7 +63,7 @@ public class AttendanceServiceImpl {
 
         attendanceResponse.setId(attendance.getId());
         attendanceResponse.setAlunoId(attendance.getAlunoId());
-        attendanceResponse.setAulaId(attendance.getAulaId());
+        attendanceResponse.setClassRoomId(attendance.getAulaId());
         attendanceResponse.setStatus(attendance.getStatus().name());
         attendanceResponse.setCheckInTime(attendance.getCheckInTime());
 
@@ -75,7 +75,7 @@ public class AttendanceServiceImpl {
     public void marcarFalta(Long alunoId, Long aulaId) {
 
         Attendance attendance = attendanceRepository
-                .findByAlunoIdAndAulaId(alunoId, aulaId)
+                .findByAlunoIdAndClassRoomId(alunoId, aulaId)
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         attendance.setStatus(AttendanceStatus.ABSENT);
@@ -83,7 +83,7 @@ public class AttendanceServiceImpl {
         attendanceRepository.save(attendance);
     }
 
-    public List<Attendance> listarPorAula(Long aulaId) {
-        return attendanceRepository.findByAulaId(aulaId);
+    public List<Attendance> listarPorAula(Long classRoomId) {
+        return attendanceRepository.findByClassRoomId(classRoomId);
     }
 }
