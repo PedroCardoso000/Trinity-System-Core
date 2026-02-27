@@ -42,7 +42,7 @@ public class Aluno {
     @Column(nullable = false, comment = "Indica se o aluno está ativo na Trinity")
     private Boolean ativo;
 
-    private Long userId;
+    private String userId;
 
     // Apenas referência
     @Column(nullable = false, comment = "ID da branch à qual o aluno está associado")

@@ -1,6 +1,7 @@
 package com.trinity.manneger_control.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,6 @@ public interface AlunoRepository extends JpaRepository<Aluno, Long> {
     List<Aluno> findByBranchIdAndAcademicId(Long branchId, Long academiaId);
 
     List<Aluno> findByAcademicId(Long academicId);
+
+    Optional<Aluno> findByEmail(String email);
 }
