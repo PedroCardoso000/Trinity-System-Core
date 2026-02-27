@@ -52,7 +52,7 @@ public class AttendanceServiceImpl {
         Attendance attendance = new Attendance();
 
         attendance.setAlunoId(aluno.getId());
-        attendance.setAulaId(classRoom.getId());
+        attendance.setClassRoomId(classRoom.getId());
         attendance.setStatus(AttendanceStatus.PRESENT);
         attendance.setCheckInTime(LocalDateTime.now());
 
@@ -63,7 +63,7 @@ public class AttendanceServiceImpl {
 
         attendanceResponse.setId(attendance.getId());
         attendanceResponse.setAlunoId(attendance.getAlunoId());
-        attendanceResponse.setClassRoomId(attendance.getAulaId());
+        attendanceResponse.setClassRoomId(attendance.getClassRoomId());
         attendanceResponse.setStatus(attendance.getStatus().name());
         attendanceResponse.setCheckInTime(attendance.getCheckInTime());
 
@@ -72,10 +72,10 @@ public class AttendanceServiceImpl {
 
     }
 
-    public void marcarFalta(Long alunoId, Long aulaId) {
+    public void marcarFalta(Long alunoId, Long classRoomId) {
 
         Attendance attendance = attendanceRepository
-                .findByAlunoIdAndClassRoomId(alunoId, aulaId)
+                .findByAlunoIdAndClassRoomId(alunoId, classRoomId)
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         attendance.setStatus(AttendanceStatus.ABSENT);

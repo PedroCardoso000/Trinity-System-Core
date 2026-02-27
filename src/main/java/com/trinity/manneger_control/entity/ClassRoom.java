@@ -10,7 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "classRoom")
+@Table(name = "class_room")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -19,7 +19,7 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Table(name = "attendance",
        uniqueConstraints = @UniqueConstraint(
-           columnNames = {"alunoId", "aulaId"}
+           columnNames = {"alunoId", "classRoomId"}
        ))
 @Getter
 @Setter
@@ -35,7 +35,7 @@ public class Attendance {
     private Long alunoId;
 
     @Column(nullable = false, comment = "ID da aula")
-    private Long aulaId;
+    private Long classRoomId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, comment = "Status da presença do aluno na aula")

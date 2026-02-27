@@ -1,5 +1,7 @@
 package com.trinity.manneger_control.rabbitmq;
 
+import java.util.List;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 

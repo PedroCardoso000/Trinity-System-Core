@@ -34,11 +34,12 @@ public class Teacher {
     private String userId;
 
     @Column(nullable = false, comment = "Age range of the teacher")
+    @Enumerated(EnumType.STRING)
     private Faixas belt;
 
     private Integer quantityDegree;
 
-    @Column(nullable = false, comment = "IDs of the branches to which the teacher is associated")
+    @Column(nullable = false, comment = "ID of the branch to which the teacher is associated")
     private List<Long> branchId;
 
     @Column(nullable = false, comment = "ID of the academic to which the teacher is associated")
