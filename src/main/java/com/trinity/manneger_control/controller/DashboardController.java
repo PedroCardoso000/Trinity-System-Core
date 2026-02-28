@@ -1,4 +1,5 @@
 package com.trinity.manneger_control.controller;
+
 import com.trinity.manneger_control.service.DashboardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,21 @@ public class DashboardController {
     @GetMapping("/{academicId}/active-alunos")
     public ResponseEntity<Long> listarTodosAlunosAtivos(@PathVariable Long academicId) {
         return ResponseEntity.ok(dashboardService.listarTodosAlunosAtivos(academicId));
+    }
+
+    @GetMapping("/{academicId}/monthly-birthdays")
+    public ResponseEntity<Long> listarAniversariantesMes(@PathVariable Long academicId) {
+        return ResponseEntity.ok(dashboardService.listarAniversariantesMes(academicId));
+    }
+
+    @GetMapping("{academicId}/classes-today")
+    public ResponseEntity<Long> listarTodasAulasHoje(@PathVariable Long academicId) {
+        return ResponseEntity.ok(dashboardService.listarTodasAulasHoje(academicId));
+    }
+
+    @GetMapping("{academicId}/monthly-attendances")
+    public ResponseEntity<Long> listarTodasPresencasMes(@PathVariable Long academicId) {
+        return ResponseEntity.ok(dashboardService.listarTodasPresencasMes(academicId));
     }
 
     @GetMapping("/{academicId}/active-branches")

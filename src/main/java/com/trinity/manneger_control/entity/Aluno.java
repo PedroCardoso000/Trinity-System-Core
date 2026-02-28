@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "aluno")
 @Getter
@@ -31,6 +33,8 @@ public class Aluno {
 
     @Column(nullable = false, unique = true, comment = "Email do aluno")
     private String email;
+
+    private LocalDate dataNascimento;
 
     private String telefone;
     private Integer anoInicioNaTrinity;

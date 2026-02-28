@@ -12,4 +12,11 @@ public interface DashboardInterface {
 
     long listarTodasFiliaisAtivas(Long academicId);
 
+    long listarTodasAulasHoje(Long academicId);
+
+    long listarTodasPresencasMes(Long academicId);
+
+    long listarAniversariantesMes(Long academicId);
+
+
 }
