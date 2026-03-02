@@ -18,7 +18,7 @@ public interface AlunoInterface {
 
     Aluno updateQuantidadeGraus(Long id, Integer quantidadeGraus);
 
-    Aluno updateFaixa(Long id, Faixas faixaEtaria);
+    Aluno updateBeltAndQuantityDegree(Long id, Faixas faixa, Integer quantidadeGraus);
 
     List<Aluno> getAlunosByAcademiaId(Long academiaId);
 

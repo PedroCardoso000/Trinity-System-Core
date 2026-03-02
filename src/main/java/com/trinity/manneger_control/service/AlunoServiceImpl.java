@@ -74,9 +74,10 @@ public class AlunoServiceImpl implements AlunoInterface {
     }
 
     @Override
-    public Aluno updateFaixa(Long id, Faixas faixaEtaria) {
+    public Aluno updateBeltAndQuantityDegree(Long id, Faixas faixa, Integer quantidadeGraus) {
         Aluno alunoExistente = buscarPorId(id);
-        alunoExistente.setFaixa(faixaEtaria);
+        alunoExistente.setFaixa(faixa);
+        alunoExistente.setQuantidadeGraus(verifyQuantidadeGraus(id, quantidadeGraus));
         return alunoRepository.save(alunoExistente);
     }
 
