@@ -57,7 +57,7 @@ public class TeacherController {
     }
 
     // Listar por Academia
-    @GetMapping("/academia/{academiaId}")
+    @GetMapping("/academic/{academiaId}")
     public ResponseEntity<List<Teacher>> getTeachersByAcademiaId(
             @PathVariable Long academiaId) {
         return ResponseEntity.ok(teacherService.getTeachersByAcademiaId(academiaId));
