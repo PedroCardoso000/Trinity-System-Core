@@ -1,11 +1,11 @@
 package com.trinity.manneger_control.rabbitmq;
 
-import java.util.List;
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import com.trinity.manneger_control.domain.dto.TeacherCreatedEvent;
+import com.trinity.manneger_control.domain.dto.TeacherDeletedEvent;
+import com.trinity.manneger_control.domain.dto.TeacherUpdatedEvent;
 import com.trinity.manneger_control.entity.Teacher;
 
 import lombok.*;
@@ -17,7 +17,6 @@ public class TeacherEventPublisher {
     private final RabbitTemplate rabbitTemplate;
 
     public void publishTeacherCreated(Teacher teacher) {
-
         TeacherCreatedEvent event = new TeacherCreatedEvent();
 
         event.setTeacherId(teacher.getId());
@@ -29,6 +28,32 @@ public class TeacherEventPublisher {
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.TEACHER_EXCHANGE,
                 RabbitMQConfig.TEACHER_ROUTING_KEY,
+                event);
+    }
+
+    public void publishTeacherUpdated(Teacher teacher) {
+
+        TeacherUpdatedEvent event = new TeacherUpdatedEvent();
+        event.setTeacherId(teacher.getId());
+        event.setEmail(teacher.getEmail());
+        event.setName(teacher.getName());
+        event.setActive(teacher.getActive());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.TEACHER_EXCHANGE,
+                RabbitMQConfig.TEACHER_UPDATED_ROUTING_KEY,
+                event);
+    }
+
+    public void publishTeacherDeleted(Teacher teacher) {
+
+        TeacherDeletedEvent event = new TeacherDeletedEvent();
+        event.setTeacherId(teacher.getId());
+        event.setEmail(teacher.getEmail());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.TEACHER_EXCHANGE,
+                RabbitMQConfig.TEACHER_DELETED_ROUTING_KEY,
                 event);
     }
 }

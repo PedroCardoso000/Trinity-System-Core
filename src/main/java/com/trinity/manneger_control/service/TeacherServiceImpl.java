@@ -56,13 +56,19 @@ public class TeacherServiceImpl implements TeacherInterface {
         teacherExistente.setActive(teacherAtualizado.getActive());
         teacherExistente.setUserId(teacherAtualizado.getUserId());
 
-        return teacherRepository.save(teacherExistente);
+        Teacher updated = teacherRepository.save(teacherExistente);
+
+        teacherEventPublisher.publishTeacherUpdated(updated);
+
+        return updated;
     }
 
     @Override
     public void deletar(Long id) {
         Teacher teacher = buscarPorId(id);
         teacherRepository.delete(teacher);
+
+        teacherEventPublisher.publishTeacherDeleted(teacher);
     }
 
     @Override

@@ -71,13 +71,20 @@ public class AlunoServiceImpl implements AlunoInterface {
         alunoExistente.setAtivo(alunoAtualizado.getAtivo());
         alunoExistente.setUserId(alunoAtualizado.getUserId());
 
-        return alunoRepository.save(alunoExistente);
+        Aluno saved = alunoRepository.save(alunoExistente);
+
+        alunoEventPublisher.publishAlunoUpdated(saved);
+
+        return saved;
     }
 
     @Override
     public void deletar(Long id) {
         Aluno aluno = buscarPorId(id);
+
         alunoRepository.delete(aluno);
+
+        alunoEventPublisher.publishAlunoDeleted(aluno);
     }
 
     @Override
@@ -127,7 +134,8 @@ public class AlunoServiceImpl implements AlunoInterface {
 
     @Override
     public List<GraduationHistoryResponse> getGraduationHistoryDTO(Long alunoId) {
-        List<AlunoGraduationHistory> histories = graduationHistoryRepository.findByAlunoIdOrderByDataGraduacaoDesc(alunoId);
+        List<AlunoGraduationHistory> histories = graduationHistoryRepository
+                .findByAlunoIdOrderByDataGraduacaoDesc(alunoId);
         return histories.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -144,7 +152,7 @@ public class AlunoServiceImpl implements AlunoInterface {
     private GraduationHistoryResponse convertToDTO(AlunoGraduationHistory history) {
         Aluno aluno = alunoRepository.findById(history.getAlunoId())
                 .orElse(null);
-        
+
         String alunoNome = (aluno != null) ? aluno.getNome() : "Aluno não encontrado";
         Long branchId = (aluno != null) ? aluno.getBranchId() : null;
         Long academicId = (aluno != null) ? aluno.getAcademicId() : null;
@@ -192,13 +200,13 @@ public class AlunoServiceImpl implements AlunoInterface {
         }
     }
 
-	@Override
-	public List<Aluno> getAlunosByAcademiaId(Long academiaId) {
-		return alunoRepository.findByAcademicId(academiaId);
-	}
+    @Override
+    public List<Aluno> getAlunosByAcademiaId(Long academiaId) {
+        return alunoRepository.findByAcademicId(academiaId);
+    }
 
-	@Override
-	public List<Aluno> getAlunosByBranchIdAndAcademiaId(Long branchId, Long academiaId) {
-		return alunoRepository.findByBranchIdAndAcademicId(branchId, academiaId);
-	}
+    @Override
+    public List<Aluno> getAlunosByBranchIdAndAcademiaId(Long branchId, Long academiaId) {
+        return alunoRepository.findByBranchIdAndAcademicId(branchId, academiaId);
+    }
 }

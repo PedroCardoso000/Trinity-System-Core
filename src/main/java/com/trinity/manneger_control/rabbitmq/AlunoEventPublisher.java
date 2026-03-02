@@ -4,6 +4,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import com.trinity.manneger_control.domain.dto.AlunoCreatedEvent;
+import com.trinity.manneger_control.domain.dto.AlunoDeletedEvent;
+import com.trinity.manneger_control.domain.dto.AlunoUpdatedEvent;
 import com.trinity.manneger_control.entity.Aluno;
 
 import lombok.*;
@@ -15,7 +17,6 @@ public class AlunoEventPublisher {
     private final RabbitTemplate rabbitTemplate;
 
     public void publishAlunoCreated(Aluno aluno) {
-
         AlunoCreatedEvent event = new AlunoCreatedEvent();
 
         event.setAlunoId(aluno.getId());
@@ -27,7 +28,32 @@ public class AlunoEventPublisher {
         rabbitTemplate.convertAndSend(
                 RabbitMQConfig.ALUNO_EXCHANGE,
                 RabbitMQConfig.ALUNO_ROUTING_KEY,
-                event
-        );
+                event);
+    }
+
+    public void publishAlunoUpdated(Aluno aluno) {
+
+        AlunoUpdatedEvent event = new AlunoUpdatedEvent();
+        event.setAlunoId(aluno.getId());
+        event.setEmail(aluno.getEmail());
+        event.setNome(aluno.getNome());
+        event.setAtivo(aluno.getAtivo());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.ALUNO_EXCHANGE,
+                RabbitMQConfig.ALUNO_UPDATED_ROUTING_KEY,
+                event);
+    }
+
+    public void publishAlunoDeleted(Aluno aluno) {
+
+        AlunoDeletedEvent event = new AlunoDeletedEvent();
+        event.setAlunoId(aluno.getId());
+        event.setEmail(aluno.getEmail());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.ALUNO_EXCHANGE,
+                RabbitMQConfig.ALUNO_DELETED_ROUTING_KEY,
+                event);
     }
 }
