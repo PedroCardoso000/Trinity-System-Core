@@ -39,19 +39,19 @@ public class AttendanceController {
     @PutMapping("/absent")
     public ResponseEntity<Void> marcarFalta(
             @RequestParam Long alunoId,
-            @RequestParam Long aulaId) {
+            @RequestParam Long classRoomId) {
 
-        attendanceService.marcarFalta(alunoId, aulaId);
+        attendanceService.marcarFalta(alunoId, classRoomId);
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/aula/{aulaId}")
+    @GetMapping("/class-room/{classRoomId}")
     public ResponseEntity<List<Attendance>> listarPorAula(
-            @PathVariable Long aulaId) {
+            @PathVariable Long classRoomId) {
 
         return ResponseEntity.ok(
-                attendanceService.listarPorAula(aulaId)
+                attendanceService.listarPorAula(classRoomId)
         );
     }
 }

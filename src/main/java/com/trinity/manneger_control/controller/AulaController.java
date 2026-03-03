@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trinity.manneger_control.entity.Attendance;
-import com.trinity.manneger_control.entity.Aula;
-import com.trinity.manneger_control.service.AulaServiceImpl;
+import com.trinity.manneger_control.entity.ClassRoom;
+import com.trinity.manneger_control.service.ClassRoomServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,48 +24,48 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AulaController {
 
-    private final AulaServiceImpl aulaServiceImpl;
+    private final ClassRoomServiceImpl classRoomServiceImpl;
 
     // Criar aula
     @PostMapping
-    public ResponseEntity<Aula> createAula(@RequestBody Aula aula) {
-        Aula novaAula = aulaServiceImpl.createAula(aula);
+    public ResponseEntity<ClassRoom> createAula(@RequestBody ClassRoom classRoom) {
+        ClassRoom novaAula = classRoomServiceImpl.createClassRoom(classRoom);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaAula);
     }
 
     // Buscar aula por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Aula> getAulaById(@PathVariable Long id) {
-        return ResponseEntity.ok(aulaServiceImpl.getAulaById(id));
+    public ResponseEntity<ClassRoom> getAulaById(@PathVariable Long id) {
+        return ResponseEntity.ok(classRoomServiceImpl.getClassRoomById(id));
     }
 
     // Listar todas as aulas
     @GetMapping
-    public ResponseEntity<List<Aula>> getAllAulas() {
-        return ResponseEntity.ok(aulaServiceImpl.getAllAulas());
+    public ResponseEntity<List<ClassRoom>> getAllAulas() {
+        return ResponseEntity.ok(classRoomServiceImpl.getAllClasses());
     }
 
     // Atualizar aula
     @PutMapping("/{id}")
-    public ResponseEntity<Aula> updateAula(
+    public ResponseEntity<ClassRoom> updateAula(
             @PathVariable Long id,
-            @RequestBody Aula aula) {
+            @RequestBody ClassRoom classRoom) {
 
-        return ResponseEntity.ok(aulaServiceImpl.updateAula(id, aula));
+        return ResponseEntity.ok(classRoomServiceImpl.updateClassRoom(id, classRoom));
     }
 
     // Deletar aula
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAula(@PathVariable Long id) {
-        aulaServiceImpl.deleteAula(id);
+        classRoomServiceImpl.deleteClassRoom(id);
         return ResponseEntity.noContent().build();
     }
 
     // Listar presenças da aula
     @GetMapping("/{id}/attendance")
-    public ResponseEntity<List<Attendance>> getAttendanceByAulaId(
+    public ResponseEntity<List<Attendance>> getAttendanceByClassRoomId(
             @PathVariable Long id) {
 
-        return ResponseEntity.ok(aulaServiceImpl.getAttendanceByAulaId(id));
+        return ResponseEntity.ok(classRoomServiceImpl.getAttendanceByClassRoomId(id));
     }
 }

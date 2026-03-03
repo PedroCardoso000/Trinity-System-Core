@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.trinity.manneger_control.domain.Faixas;
+import com.trinity.manneger_control.domain.dto.GraduationHistoryResponse;
+import com.trinity.manneger_control.domain.dto.StudentUpdateBeltAndDegree;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.service.AlunoServiceImpl;
 
@@ -51,10 +52,10 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.updateQuantidadeGraus(id, quantidadeGraus));
     }
 
-    @PatchMapping("/{id}/active")
-    public ResponseEntity<Aluno> updateFaixa(@PathVariable Long id,
-            @RequestParam Faixas faixaEtaria) {
-        return ResponseEntity.ok(alunoService.updateFaixa(id, faixaEtaria));
+    @PatchMapping("/faixa-aluno")
+    public ResponseEntity<Aluno> updateBeltAndQuantityDegree(
+            @RequestBody StudentUpdateBeltAndDegree studentUpdateBeltAndDegree) {
+        return ResponseEntity.ok(alunoService.updateBeltAndQuantityDegree(studentUpdateBeltAndDegree.id(), studentUpdateBeltAndDegree.faixa(), studentUpdateBeltAndDegree.quantidadeGraus()));
     }
 
     // Listar por Academia
@@ -70,5 +71,15 @@ public class AlunoController {
             @PathVariable Long branchId,
             @PathVariable Long academiaId) {
         return ResponseEntity.ok(alunoService.getAlunosByBranchIdAndAcademiaId(branchId, academiaId));
+    }
+
+    @GetMapping("/{id}/graduation-history")
+    public ResponseEntity<List<GraduationHistoryResponse>> getGraduationHistory(@PathVariable Long id) {
+        return ResponseEntity.ok(alunoService.getGraduationHistoryDTO(id));
+    }
+
+    @GetMapping("/graduation-history/all")
+    public ResponseEntity<List<GraduationHistoryResponse>> getAllGraduationHistory() {
+        return ResponseEntity.ok(alunoService.getAllGraduationHistoryDTO());
     }
 }

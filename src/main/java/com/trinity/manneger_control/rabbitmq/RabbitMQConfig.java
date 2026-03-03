@@ -16,10 +16,22 @@ public class RabbitMQConfig {
     public static final String ALUNO_EXCHANGE = "aluno.exchange";
     public static final String ALUNO_QUEUE = "aluno.created.queue";
     public static final String ALUNO_ROUTING_KEY = "aluno.created";
+    public static final String ALUNO_UPDATED_ROUTING_KEY = "aluno.updated";
+    public static final String ALUNO_DELETED_ROUTING_KEY = "aluno.deleted";
 
     public static final String ACADEMIC_EXCHANGE = "trinity.exchange";
     public static final String ACADEMIC_QUEUE = "academic.created.queue";
     public static final String ACADEMIC_ROUTING_KEY = "academic.created";
+
+    public static final String TEACHER_EXCHANGE = "teacher.exchange";
+    public static final String TEACHER_QUEUE = "teacher.created.queue";
+    public static final String TEACHER_ROUTING_KEY = "teacher.created";
+    public static final String TEACHER_UPDATED_ROUTING_KEY = "teacher.updated";
+    public static final String TEACHER_DELETED_ROUTING_KEY = "teacher.deleted";
+
+    public static final String USER_EXCHANGE = "user.exchange";
+    public static final String USER_QUEUE = "user.created.queue";
+    public static final String USER_ROUTING_KEY = "user.created";
 
     @Bean
     public TopicExchange academicExchange() {
@@ -53,6 +65,27 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public TopicExchange userExchange() {
+        return new TopicExchange(USER_EXCHANGE);
+    }
+
+    @Bean
+    public Queue userQueue() {
+        return new Queue(USER_QUEUE);
+    }
+
+    @Bean
+    public Binding userBinding(
+            Queue userQueue,
+            TopicExchange userExchange) {
+
+        return BindingBuilder
+                .bind(userQueue)
+                .to(userExchange)
+                .with(USER_ROUTING_KEY);
+    }
+
+    @Bean
     public Binding binding(Queue alunoQueue, TopicExchange alunoExchange) {
         return BindingBuilder
                 .bind(alunoQueue)
@@ -61,9 +94,46 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Binding alunoUpdatedBinding(Queue alunoQueue, TopicExchange alunoExchange) {
+        return BindingBuilder
+                .bind(alunoQueue)
+                .to(alunoExchange)
+                .with(ALUNO_UPDATED_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding alunoDeletedBinding(Queue alunoQueue, TopicExchange alunoExchange) {
+        return BindingBuilder
+                .bind(alunoQueue)
+                .to(alunoExchange)
+                .with(ALUNO_DELETED_ROUTING_KEY);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
         converter.setAlwaysConvertToInferredType(true);
         return converter;
+    }
+
+    @Bean
+    public TopicExchange teacherExchange() {
+        return new TopicExchange(TEACHER_EXCHANGE);
+    }
+
+    @Bean
+    public Queue teacherQueue() {
+        return new Queue(TEACHER_QUEUE);
+    }
+
+    @Bean
+    public Binding teacherBinding(
+            Queue teacherQueue,
+            TopicExchange teacherExchange) {
+
+        return BindingBuilder
+                .bind(teacherQueue)
+                .to(teacherExchange)
+                .with(TEACHER_ROUTING_KEY);
     }
 }

@@ -8,6 +8,6 @@ import lombok.Setter;
 public class CheckInRequest {
 
     private Long alunoId;
-    private Long aulaId;
+    private Long classRoomId;
 }
 
