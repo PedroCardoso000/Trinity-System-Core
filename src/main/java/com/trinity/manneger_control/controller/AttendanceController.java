@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +20,7 @@ import com.trinity.manneger_control.service.AttendanceServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/attendance")
+@RequestMapping("/attendances")
 @RequiredArgsConstructor
 public class AttendanceController {
 
@@ -28,31 +28,35 @@ public class AttendanceController {
 
     @PostMapping("/check-in")
     public ResponseEntity<AttendanceResponse> checkIn(
-            @RequestBody CheckInRequest request) {
+            @RequestParam Long alunoId,
+            @RequestParam Long classRoomId) {
 
-        AttendanceResponse response =
-                attendanceService.checkIn(request);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(
+                attendanceService.checkIn(alunoId, classRoomId));
     }
 
-    @PutMapping("/absent")
-    public ResponseEntity<Void> marcarFalta(
+    @PostMapping("/pendant")
+    public ResponseEntity<Void> markPendant(
+            @RequestBody CheckInRequest request) {
+
+        attendanceService.marcarPendente(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/absent")
+    public ResponseEntity<Void> markAbsent(
             @RequestParam Long alunoId,
             @RequestParam Long classRoomId) {
 
         attendanceService.marcarFalta(alunoId, classRoomId);
-
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/class-room/{classRoomId}")
-    public ResponseEntity<List<Attendance>> listarPorAula(
+    @GetMapping("/classroom/{classRoomId}")
+    public ResponseEntity<List<Attendance>> getByClassRoom(
             @PathVariable Long classRoomId) {
 
         return ResponseEntity.ok(
-                attendanceService.listarPorAula(classRoomId)
-        );
+                attendanceService.listarPorAula(classRoomId));
     }
 }
-

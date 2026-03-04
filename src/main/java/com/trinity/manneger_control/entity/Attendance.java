@@ -15,32 +15,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.UniqueConstraint;
 
-
 @Entity
-@Table(name = "attendance",
-       uniqueConstraints = @UniqueConstraint(
-           columnNames = {"alunoId", "classRoomId"}
-       ))
+@Table(name = "attendance", uniqueConstraints = @UniqueConstraint(columnNames = { "alunoId", "classRoomId" }))
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Attendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, comment = "ID do aluno")
+    @Column(nullable = false)
     private Long alunoId;
 
-    @Column(nullable = false, comment = "ID da aula")
+    @Column(nullable = false)
     private Long classRoomId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, comment = "Status da presença do aluno na aula")
+    @Column(nullable = false)
     private AttendanceStatus status;
 
     private LocalDateTime checkInTime;
 }
-
