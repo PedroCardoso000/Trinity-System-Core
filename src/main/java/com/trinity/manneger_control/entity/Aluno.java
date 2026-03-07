@@ -1,5 +1,7 @@
 package com.trinity.manneger_control.entity;
 
+import java.time.LocalDate;
+
 import com.trinity.manneger_control.domain.Faixas;
 
 import jakarta.persistence.Column;
@@ -35,6 +37,9 @@ public class Aluno {
 
     private String telefone;
     private Integer anoInicioNaTrinity;
+    
+    @Column(nullable = false, comment = "Data de nascimento do aluno")
+    private LocalDate dataNascimento;
 
     @Column(nullable = false, comment = "Faixa etária do aluno")
     @Enumerated(EnumType.STRING)
@@ -46,7 +51,6 @@ public class Aluno {
     private Boolean ativo;
 
     private String userId;
-
     // Apenas referência
     @Column(nullable = false, comment = "ID da branch à qual o aluno está associado")
     private Long branchId;
