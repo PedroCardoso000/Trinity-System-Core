@@ -29,8 +29,7 @@ public class ClassScheduleController {
     public ResponseEntity<ClassSchedule> getById(
             @PathVariable Long id) {
 
-        return ResponseEntity.ok(
-                classScheduleService.getById(id));
+        return ResponseEntity.ok(classScheduleService.getById(id));
     }
 
     @GetMapping
@@ -39,12 +38,13 @@ public class ClassScheduleController {
                 classScheduleService.getAll());
     }
 
-    @GetMapping("/branch/{branchId}")
+    @GetMapping("/filter/academic-branch")
     public ResponseEntity<List<ClassSchedule>> getByBranch(
-            @PathVariable Long branchId) {
+            @RequestParam Long branchId,
+            @RequestParam Long academicId) {
 
         return ResponseEntity.ok(
-                classScheduleService.getByBranch(branchId));
+                classScheduleService.getByBranchAndAcademic(branchId, academicId));
     }
 
     @PutMapping("/{id}")

@@ -38,8 +38,8 @@ public class ClassScheduleServiceImpl {
         return classScheduleRepository.findAll();
     }
 
-    public List<ClassSchedule> getByBranch(Long branchId) {
-        return classScheduleRepository.findByBranchId(branchId);
+    public List<ClassSchedule> getByBranchAndAcademic(Long branchId, Long academicId) {
+        return classScheduleRepository.findByBranchIdAndAcademicId(branchId, academicId);
     }
 
     public ClassSchedule update(Long id, ClassSchedule updated) {
@@ -132,7 +132,6 @@ public class ClassScheduleServiceImpl {
             currentDate = currentDate.plusDays(1);
         }
 
-        // 🔥 Atualiza até onde foi gerado
         schedule.setGeneratedUntil(generationEnd);
         classScheduleRepository.save(schedule);
     }

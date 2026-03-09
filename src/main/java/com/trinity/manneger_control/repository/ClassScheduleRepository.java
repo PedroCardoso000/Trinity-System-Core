@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Long> {
-    List<ClassSchedule> findByBranchId(Long branchId);
+    List<ClassSchedule> findByBranchIdAndAcademicId(Long branchId, Long academicId);
 
     List<ClassSchedule> findByBranchIdAndActiveTrue(Long branchId);
 }

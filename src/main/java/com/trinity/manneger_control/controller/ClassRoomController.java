@@ -2,22 +2,17 @@ package com.trinity.manneger_control.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.trinity.manneger_control.entity.ClassRoom;
 import com.trinity.manneger_control.service.ClassRoomServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/classrooms")
@@ -31,14 +26,25 @@ public class ClassRoomController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
-                classRoomService.getById(id));
+                classRoomService.getClassRoomById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<ClassRoom>> getAll() {
 
         return ResponseEntity.ok(
-                classRoomService.getAll());
+                classRoomService.getAllClasses());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<ClassRoom>> getFiltered(
+            @RequestParam Long branchId,
+            @RequestParam Long academicId,
+            @RequestParam(required = false) DayOfWeek dayOfWeek,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        return ResponseEntity.ok(
+                classRoomService.findFiltered(branchId, academicId, dayOfWeek, date));
     }
 
     @PutMapping("/{id}")
@@ -47,16 +53,16 @@ public class ClassRoomController {
             @RequestBody ClassRoom classRoom) {
 
         return ResponseEntity.ok(
-                classRoomService.update(id, classRoom));
+                classRoomService.updateClassRoom(id, classRoom));
     }
 
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<Void> cancel(
             @PathVariable Long id) {
 
-        ClassRoom classRoom = classRoomService.getById(id);
+        ClassRoom classRoom = classRoomService.getClassRoomById(id);
         classRoom.setCancelled(true);
-        classRoomService.update(id, classRoom);
+        classRoomService.updateClassRoom(id, classRoom);
 
         return ResponseEntity.ok().build();
     }
@@ -65,7 +71,7 @@ public class ClassRoomController {
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {
 
-        classRoomService.delete(id);
+        classRoomService.deleteClassRoom(id);
         return ResponseEntity.noContent().build();
     }
 }
