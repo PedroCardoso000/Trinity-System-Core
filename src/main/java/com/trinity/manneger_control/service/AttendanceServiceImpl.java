@@ -1,12 +1,15 @@
 package com.trinity.manneger_control.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.trinity.manneger_control.domain.AttendanceStatus;
+import com.trinity.manneger_control.domain.dto.AttendaceDto;
 import com.trinity.manneger_control.domain.dto.AttendanceResponse;
+import com.trinity.manneger_control.domain.dto.CheckInDto;
 import com.trinity.manneger_control.domain.dto.CheckInRequest;
 import com.trinity.manneger_control.entity.Aluno;
 import com.trinity.manneger_control.entity.Attendance;
@@ -25,14 +28,17 @@ public class AttendanceServiceImpl {
     private final AlunoRepository alunoRepository;
     private final ClassRoomRepository classRoomRepository;
 
-    public AttendanceResponse checkIn(Long alunoId, Long classRoomId) {
+    public CheckInDto checkIn(Long alunoId, Long classRoomId) {
 
         Attendance attendance = attendanceRepository
                 .findByAlunoIdAndClassRoomId(alunoId, classRoomId)
                 .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
 
         if (attendance.getStatus() == AttendanceStatus.PRESENT) {
-            throw new RuntimeException("Check-in já realizado");
+            return new CheckInDto(
+                    alunoId,
+                    classRoomId,
+                    "Check-in já realizado");
         }
 
         attendance.setStatus(AttendanceStatus.PRESENT);
@@ -40,7 +46,10 @@ public class AttendanceServiceImpl {
 
         attendanceRepository.save(attendance);
 
-        return mapToResponse(attendance);
+        return new CheckInDto(
+                alunoId,
+                classRoomId,
+                "Check-in realizado com sucesso");
     }
 
     public AttendanceResponse marcarPendente(CheckInRequest request) {
@@ -110,7 +119,20 @@ public class AttendanceServiceImpl {
         attendanceRepository.save(attendance);
     }
 
-    public List<Attendance> listarPorAula(Long classRoomId) {
-        return attendanceRepository.findByClassRoomId(classRoomId);
+    public List<AttendaceDto> listarPorAula(Long classRoomId) {
+        List<AttendaceDto> attendaceDtos = new ArrayList<>();
+        List<Attendance> attendances = attendanceRepository.findByClassRoomId(classRoomId);
+        for (Attendance attendance : attendances) {
+            Aluno aluno = alunoRepository.findById(attendance.getAlunoId())
+                    .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+            attendaceDtos.add(new AttendaceDto(
+                    attendance.getId(),
+                    aluno.getNome(),
+                    attendance.getClassRoomId(),
+                    attendance.getStatus(),
+                    attendance.getCheckInTime()));
+        }
+
+        return attendaceDtos;
     }
 }
