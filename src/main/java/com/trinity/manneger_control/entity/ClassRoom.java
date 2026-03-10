@@ -22,19 +22,17 @@ public class ClassRoom {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
+    private Long scheduleId;
 
     @Column(nullable = false)
-    private LocalDateTime dataHora;
+    private LocalDateTime dateTime; // 2026-03-06T19:00
 
     @Column(nullable = false)
-    private Boolean ativa;
+    private Boolean cancelled;
 
-    // Referência simples
     @Column(nullable = false)
     private Long branchId;
 
-    // Referência simples
     @Column(nullable = false)
     private Long academicId;
 }

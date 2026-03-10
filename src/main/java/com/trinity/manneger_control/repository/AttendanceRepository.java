@@ -26,9 +26,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end);
 
-    Optional<Attendance> findByAlunoIdAndClassRoomId(Long alunoId, Long classRoomId);
+   Optional<Attendance> findByAlunoIdAndClassRoomId(Long alunoId, Long classRoomId);
 
     List<Attendance> findByClassRoomId(Long classRoomId);
-
-    List<Attendance> findByAlunoId(Long alunoId);
 }
