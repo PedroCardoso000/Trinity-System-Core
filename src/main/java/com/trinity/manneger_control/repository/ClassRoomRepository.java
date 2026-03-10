@@ -51,4 +51,6 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
                         Long academicId,
                         LocalDateTime start,
                         LocalDateTime end);
+    Long countByAcademicIdAndDataHoraBetween(Long academicId, LocalDateTime start, LocalDateTime end);  
+    List<ClassRoom> findByBranchId(Long branchId);
 }
