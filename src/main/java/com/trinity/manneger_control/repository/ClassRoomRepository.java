@@ -4,20 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.trinity.manneger_control.entity.ClassRoom;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
-
-        List<ClassRoom> findByBranchId(Long branchId);
 
         List<ClassRoom> findByScheduleId(Long scheduleId);
 
@@ -51,6 +44,6 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
                         Long academicId,
                         LocalDateTime start,
                         LocalDateTime end);
-    Long countByAcademicIdAndDataHoraBetween(Long academicId, LocalDateTime start, LocalDateTime end);  
+    Long countByAcademicIdAndDateTimeBetween(Long academicId, LocalDateTime start, LocalDateTime end);  
     List<ClassRoom> findByBranchId(Long branchId);
 }
