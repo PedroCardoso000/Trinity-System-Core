@@ -56,7 +56,7 @@ public class DashboardServiceImpl implements DashboardInterface {
 
         LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
 
-        long dailyLessonCount = classRoomRepository.countByAcademicIdAndDataHoraBetween(academicId, startOfDay, endOfDay);
+        long dailyLessonCount = classRoomRepository.countByAcademicIdAndDateTimeBetween(academicId, startOfDay, endOfDay);
 
         return dailyLessonCount;
     }
