@@ -8,7 +8,9 @@ public enum Faixas {
     VERDE,
     AZUL,
     LARANJA,
+    MARROM,
     ROSA,
     AMARELO,
+    ROXA,
     BRANCA
 }

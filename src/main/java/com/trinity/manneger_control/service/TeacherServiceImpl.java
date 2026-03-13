@@ -50,6 +50,8 @@ public class TeacherServiceImpl implements TeacherInterface {
         teacherExistente.setName(teacherAtualizado.getName());
         teacherExistente.setEmail(teacherAtualizado.getEmail());
         teacherExistente.setPhone(teacherAtualizado.getPhone());
+        teacherExistente.setQuantityDegree(teacherAtualizado.getQuantityDegree());
+        teacherExistente.setBelt(teacherAtualizado.getBelt());
         teacherExistente.setAddress(teacherAtualizado.getAddress());
         teacherExistente.setBranchId(teacherAtualizado.getBranchId());
         teacherExistente.setAcademicId(teacherAtualizado.getAcademicId());
