@@ -79,8 +79,8 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.getGraduationHistoryDTO(id));
     }
 
-    @GetMapping("/graduation-history/all")
-    public ResponseEntity<List<GraduationHistoryResponse>> getAllGraduationHistory() {
-        return ResponseEntity.ok(alunoService.getAllGraduationHistoryDTO());
+    @GetMapping("/graduation-history/all/{idAcademia}")
+    public ResponseEntity<List<GraduationHistoryResponse>> getAllGraduationHistory(@PathVariable Long idAcademia) {
+        return ResponseEntity.ok(alunoService.getAllGraduationHistoryDTO(idAcademia));
     }
 }

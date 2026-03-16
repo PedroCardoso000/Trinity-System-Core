@@ -144,9 +144,22 @@ public class AlunoServiceImpl implements AlunoInterface {
     }
 
     @Override
-    public List<GraduationHistoryResponse> getAllGraduationHistoryDTO() {
+    public List<GraduationHistoryResponse> getAllGraduationHistoryDTO(Long idAcademia) {
+        // 1. Buscamos todos os históricos
         List<AlunoGraduationHistory> histories = graduationHistoryRepository.findAll();
+
+        // 2. Filtramos usando Stream para criar uma nova lista apenas com o que
+        // interessa
         return histories.stream()
+                .filter(history -> {
+                    if (history.getAlunoId() == null)
+                        return false;
+
+                    // Busca o aluno para verificar a academia
+                    return alunoRepository.findById(history.getAlunoId())
+                            .map(aluno -> aluno.getAcademicId() != null && aluno.getAcademicId().equals(idAcademia))
+                            .orElse(false);
+                })
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -206,7 +219,7 @@ public class AlunoServiceImpl implements AlunoInterface {
     public List<GetAlunoAcademicDTO> getAlunosByAcademiaId(Long academiaId) {
         List<GetAlunoAcademicDTO> getAlunoAcademicDTOs = new ArrayList<>();
         List<Aluno> alunos = alunoRepository.findByAcademicId(academiaId);
-        for(Aluno aluno : alunos){
+        for (Aluno aluno : alunos) {
             GetAlunoAcademicDTO getAlunoAcademicDTO = new GetAlunoAcademicDTO();
             getAlunoAcademicDTO.setNome(aluno.getNome());
             getAlunoAcademicDTO.setEmail(aluno.getEmail());
@@ -215,10 +228,10 @@ public class AlunoServiceImpl implements AlunoInterface {
             getAlunoAcademicDTO.setBranchId(aluno.getBranchId());
             getAlunoAcademicDTO.setAcademicId(aluno.getAcademicId());
             getAlunoAcademicDTO.setAtivo(aluno.getAtivo());
-            if(branchRepository.findById(aluno.getBranchId()).isPresent())
-            getAlunoAcademicDTO.setBranchName(
-                    branchRepository.findById(aluno.getBranchId()).map(Branch::getName)
-                    .orElse("Filial não encontrada"));
+            if (branchRepository.findById(aluno.getBranchId()).isPresent())
+                getAlunoAcademicDTO.setBranchName(
+                        branchRepository.findById(aluno.getBranchId()).map(Branch::getName)
+                                .orElse("Filial não encontrada"));
 
             getAlunoAcademicDTOs.add(getAlunoAcademicDTO);
         }

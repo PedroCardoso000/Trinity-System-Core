@@ -33,6 +33,6 @@ public interface AlunoInterface {
 
     List<GraduationHistoryResponse> getGraduationHistoryDTO(Long alunoId);
 
-    List<GraduationHistoryResponse> getAllGraduationHistoryDTO();
+    List<GraduationHistoryResponse> getAllGraduationHistoryDTO(Long idAcademia);
 
 }
