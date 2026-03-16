@@ -1,9 +1,11 @@
 package com.trinity.manneger_control.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.trinity.manneger_control.domain.dto.GetAlunoAcademicDTO;
 import com.trinity.manneger_control.domain.dto.GraduationHistoryResponse;
 import com.trinity.manneger_control.entity.Academic;
 import com.trinity.manneger_control.entity.AlunoGraduationHistory;
@@ -201,8 +203,26 @@ public class AlunoServiceImpl implements AlunoInterface {
     }
 
     @Override
-    public List<Aluno> getAlunosByAcademiaId(Long academiaId) {
-        return alunoRepository.findByAcademicId(academiaId);
+    public List<GetAlunoAcademicDTO> getAlunosByAcademiaId(Long academiaId) {
+        List<GetAlunoAcademicDTO> getAlunoAcademicDTOs = new ArrayList<>();
+        List<Aluno> alunos = alunoRepository.findByAcademicId(academiaId);
+        for(Aluno aluno : alunos){
+            GetAlunoAcademicDTO getAlunoAcademicDTO = new GetAlunoAcademicDTO();
+            getAlunoAcademicDTO.setNome(aluno.getNome());
+            getAlunoAcademicDTO.setEmail(aluno.getEmail());
+            getAlunoAcademicDTO.setQuantityDegree(aluno.getQuantidadeGraus());
+            getAlunoAcademicDTO.setBelt(aluno.getFaixa());
+            getAlunoAcademicDTO.setBranchId(aluno.getBranchId());
+            getAlunoAcademicDTO.setAcademicId(aluno.getAcademicId());
+            getAlunoAcademicDTO.setAtivo(aluno.getAtivo());
+            if(branchRepository.findById(aluno.getBranchId()).isPresent())
+            getAlunoAcademicDTO.setBranchName(
+                    branchRepository.findById(aluno.getBranchId()).map(Branch::getName)
+                    .orElse("Filial não encontrada"));
+
+            getAlunoAcademicDTOs.add(getAlunoAcademicDTO);
+        }
+        return getAlunoAcademicDTOs;
     }
 
     @Override

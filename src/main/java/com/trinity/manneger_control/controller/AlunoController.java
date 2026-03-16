@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.trinity.manneger_control.domain.dto.GetAlunoAcademicDTO;
 import com.trinity.manneger_control.domain.dto.GraduationHistoryResponse;
 import com.trinity.manneger_control.domain.dto.StudentUpdateBeltAndDegree;
 import com.trinity.manneger_control.entity.Aluno;
@@ -60,7 +61,7 @@ public class AlunoController {
 
     // Listar por Academia
     @GetMapping("/academia/{academiaId}")
-    public ResponseEntity<List<Aluno>> getAlunosByAcademiaId(
+    public ResponseEntity<List<GetAlunoAcademicDTO>> getAlunosByAcademiaId(
             @PathVariable Long academiaId) {
         return ResponseEntity.ok(alunoService.getAlunosByAcademiaId(academiaId));
     }
