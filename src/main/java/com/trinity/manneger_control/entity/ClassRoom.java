@@ -3,6 +3,7 @@ package com.trinity.manneger_control.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.*;
 import java.time.LocalDateTime;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "class_room")
+@Table(name = "class_room",
+       uniqueConstraints = @UniqueConstraint(columnNames = {"scheduleId", "dateTime"}))
 @Getter
 @Setter
 @NoArgsConstructor

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.trinity.manneger_control.domain.dto.ResponseResult;
 import com.trinity.manneger_control.entity.ClassRoom;
 import com.trinity.manneger_control.service.ClassRoomServiceImpl;
 
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/classrooms")
@@ -29,13 +31,6 @@ public class ClassRoomController {
                 classRoomService.getClassRoomById(id));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ClassRoom>> getAll() {
-
-        return ResponseEntity.ok(
-                classRoomService.getAllClasses());
-    }
-
     @GetMapping("/filter")
     public ResponseEntity<List<ClassRoom>> getFiltered(
             @RequestParam Long branchId,
@@ -45,6 +40,40 @@ public class ClassRoomController {
 
         return ResponseEntity.ok(
                 classRoomService.findFiltered(branchId, academicId, dayOfWeek, date));
+    }
+
+    @GetMapping("/calendar")
+    public ResponseEntity<List<ClassRoom>> getCalendar(
+            @RequestParam Long branchId,
+            @RequestParam Long academicId,
+            @RequestParam(required = false, defaultValue = "SUNDAY") DayOfWeek dayOfWeek,
+            @RequestParam(required = false, defaultValue = "0000-00-00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        return ResponseEntity.ok(
+                classRoomService.findFiltered(branchId, academicId, dayOfWeek, date));
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<ResponseResult> cancel(
+            @RequestParam Long scheduleId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam Long branchId,
+            @RequestParam Long academicId) {
+
+        return classRoomService.cancelarAula(scheduleId, dateTime, branchId, academicId);
+
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponseResult> classRoomCreateOrVerify(
+            @RequestParam Long scheduleId,
+            @RequestParam Long alunoId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam Long branchId,
+            @RequestParam Long academicId) {
+
+        return classRoomService.classRoomCreateOrVerify(scheduleId, alunoId, dateTime, branchId, academicId);
+
     }
 
     @PutMapping("/{id}")

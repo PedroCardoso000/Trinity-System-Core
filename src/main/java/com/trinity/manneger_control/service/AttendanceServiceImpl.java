@@ -32,13 +32,13 @@ public class AttendanceServiceImpl {
 
         Attendance attendance = attendanceRepository
                 .findByAlunoIdAndClassRoomId(alunoId, classRoomId)
-                .orElseThrow(() -> new RuntimeException("Registro não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Register not found Attendance"));
 
         if (attendance.getStatus() == AttendanceStatus.PRESENT) {
             return new CheckInDto(
                     alunoId,
                     classRoomId,
-                    "Check-in já realizado");
+                    "Attendance already checked in");
         }
 
         attendance.setStatus(AttendanceStatus.PRESENT);
@@ -49,16 +49,16 @@ public class AttendanceServiceImpl {
         return new CheckInDto(
                 alunoId,
                 classRoomId,
-                "Check-in realizado com sucesso");
+                "Attendance checked in successfully");
     }
 
     public AttendanceResponse marcarPendente(CheckInRequest request) {
 
         Aluno aluno = alunoRepository.findById(request.getAlunoId())
-                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
 
         ClassRoom classRoom = classRoomRepository.findById(request.getClassRoomId())
-                .orElseThrow(() -> new RuntimeException("Aula não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Class room not found"));
 
         validateCheckIn(aluno, classRoom);
 
@@ -77,21 +77,21 @@ public class AttendanceServiceImpl {
     private void validateCheckIn(Aluno aluno, ClassRoom classRoom) {
 
         if (classRoom.getCancelled()) {
-            throw new RuntimeException("Aula cancelada");
+            throw new RuntimeException("Class cancelled");
         }
 
         if (!aluno.getAtivo()) {
-            throw new RuntimeException("Aluno inativo");
+            throw new RuntimeException("Student inactive");
         }
 
         if (!aluno.getBranchId().equals(classRoom.getBranchId())) {
-            throw new RuntimeException("Aluno não pertence à filial da aula");
+            throw new RuntimeException("Student does not belong to the branch of the class");
         }
 
         attendanceRepository
                 .findByAlunoIdAndClassRoomId(aluno.getId(), classRoom.getId())
                 .ifPresent(a -> {
-                    throw new RuntimeException("Check-in já realizado");
+                    throw new RuntimeException("Attendance already checked in");
                 });
     }
 

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.trinity.manneger_control.entity.ClassRoom;
 
 
+import java.util.Optional;
+
 @Repository
 public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
 
@@ -17,6 +19,8 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Long> {
         List<ClassRoom> findByBranchIdAndAcademicId(Long branchId, Long academicId);
 
         boolean existsByScheduleIdAndDateTime(Long scheduleId, LocalDateTime dateTime);
+        
+        Optional<ClassRoom> findByScheduleIdAndDateTime(Long scheduleId, LocalDateTime dateTime);
 
         List<ClassRoom> findByBranchIdAndDateTimeBetween(
                         Long branchId,

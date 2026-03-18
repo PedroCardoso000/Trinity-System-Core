@@ -29,4 +29,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
    Optional<Attendance> findByAlunoIdAndClassRoomId(Long alunoId, Long classRoomId);
 
     List<Attendance> findByClassRoomId(Long classRoomId);
+
+    boolean existsByAlunoIdAndClassRoomId(Long alunoId, Long classRoomId);
 }

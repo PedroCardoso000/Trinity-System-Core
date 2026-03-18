@@ -1,14 +1,15 @@
 package com.trinity.manneger_control.service;
 
-import com.trinity.manneger_control.entity.ClassRoom;
+import com.trinity.manneger_control.domain.dto.ResponseResult;
 import com.trinity.manneger_control.entity.ClassSchedule;
 import com.trinity.manneger_control.repository.ClassRoomRepository;
 import com.trinity.manneger_control.repository.ClassScheduleRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,17 +17,15 @@ import java.util.List;
 public class ClassScheduleServiceImpl {
 
     private final ClassScheduleRepository classScheduleRepository;
-    private final ClassRoomRepository classRoomRepository;
 
-    public ClassSchedule create(ClassSchedule schedule) {
-
-        schedule.setGeneratedUntil(null);
-
-        ClassSchedule saved = classScheduleRepository.save(schedule);
-
-        generateNext(saved.getId()); // gera primeiros 3 meses
-
-        return getById(saved.getId());
+    public ResponseEntity<ResponseResult> create(ClassSchedule schedule) {
+        ClassSchedule savedSchedule = classScheduleRepository.save(schedule);
+        if (savedSchedule == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseResult(false, "Error to create schedule"));
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ResponseResult(true, "Schedule created successfully"));
     }
 
     public ClassSchedule getById(Long id) {
@@ -42,8 +41,13 @@ public class ClassScheduleServiceImpl {
         return classScheduleRepository.findByBranchIdAndAcademicId(branchId, academicId);
     }
 
-    public ClassSchedule update(Long id, ClassSchedule updated) {
-
+    public ResponseEntity<ResponseResult> update(Long id, ClassSchedule updated) {
+        if (updated.getDayOfWeek() == null || updated.getTime() == null || updated.getStartDate() == null
+                || updated.getActive() == null || updated.getBranchId() == null
+                || updated.getAcademicId() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseResult(false, "Error to update schedule"));
+        }
         ClassSchedule existing = getById(id);
 
         existing.setName(updated.getName());
@@ -55,84 +59,18 @@ public class ClassScheduleServiceImpl {
         existing.setBranchId(updated.getBranchId());
         existing.setAcademicId(updated.getAcademicId());
 
-        return classScheduleRepository.save(existing);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ResponseResult(true, "Schedule updated successfully"));
     }
 
-    public void delete(Long id) {
+    public ResponseEntity<ResponseResult> delete(Long id) {
+        ClassSchedule existing = getById(id);
+        if (existing == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseResult(false, "Error to delete schedule"));
+        }
         classScheduleRepository.deleteById(id);
-    }
-
-    // POST /class-schedules/{id}/generate-next
-    public void generateNext(Long id) {
-
-        ClassSchedule schedule = getById(id);
-
-        if (!schedule.getActive()) {
-            throw new RuntimeException("Schedule is not active");
-        }
-
-        generateClassRooms(schedule);
-    }
-
-    private void generateClassRooms(ClassSchedule schedule) {
-
-        LocalDate generationStart;
-
-        // 🔹 Se nunca gerou antes
-        if (schedule.getGeneratedUntil() == null) {
-            generationStart = schedule.getStartDate();
-        } else {
-            generationStart = schedule.getGeneratedUntil().plusDays(1);
-        }
-
-        // 🔹 Sempre gera +3 meses a partir do ponto atual
-        LocalDate generationEnd = generationStart.plusMonths(3);
-
-        // 🔹 Se existir endDate, respeita limite
-        if (schedule.getEndDate() != null &&
-                generationEnd.isAfter(schedule.getEndDate())) {
-
-            generationEnd = schedule.getEndDate();
-        }
-
-        // 🔹 Se já passou do limite, não gera nada
-        if (generationStart.isAfter(generationEnd)) {
-            return;
-        }
-
-        LocalDate currentDate = generationStart;
-
-        while (!currentDate.isAfter(generationEnd)) {
-
-            if (currentDate.getDayOfWeek().equals(schedule.getDayOfWeek())) {
-
-                LocalDateTime dateTime =
-                        LocalDateTime.of(currentDate, schedule.getTime());
-
-                boolean alreadyExists =
-                        classRoomRepository
-                                .existsByScheduleIdAndDateTime(
-                                        schedule.getId(),
-                                        dateTime
-                                );
-
-                if (!alreadyExists) {
-
-                    ClassRoom classRoom = new ClassRoom();
-                    classRoom.setScheduleId(schedule.getId());
-                    classRoom.setDateTime(dateTime);
-                    classRoom.setCancelled(false);
-                    classRoom.setBranchId(schedule.getBranchId());
-                    classRoom.setAcademicId(schedule.getAcademicId());
-
-                    classRoomRepository.save(classRoom);
-                }
-            }
-
-            currentDate = currentDate.plusDays(1);
-        }
-
-        schedule.setGeneratedUntil(generationEnd);
-        classScheduleRepository.save(schedule);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ResponseResult(true, "Schedule deleted successfully"));
     }
 }
