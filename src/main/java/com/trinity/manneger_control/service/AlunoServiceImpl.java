@@ -104,6 +104,12 @@ public class AlunoServiceImpl implements AlunoInterface {
     @Override
     public Aluno updateBeltAndQuantityDegree(Long id, Faixas faixa, Integer quantidadeGraus) {
         Aluno alunoExistente = buscarPorId(id);
+        
+        // Se a faixa mudou, resetamos o contador de aulas
+        if (alunoExistente.getFaixa() != faixa) {
+            alunoExistente.setTotalAulasGraduacao(0);
+        }
+        
         alunoExistente.setFaixa(faixa);
         alunoExistente.setQuantidadeGraus(verifyQuantidadeGraus(id, quantidadeGraus));
         Aluno saved = alunoRepository.save(alunoExistente);

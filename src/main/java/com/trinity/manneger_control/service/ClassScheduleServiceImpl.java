@@ -54,6 +54,10 @@ public class ClassScheduleServiceImpl {
         existing.setDayOfWeek(updated.getDayOfWeek());
         existing.setTime(updated.getTime());
         existing.setStartDate(updated.getStartDate());
+
+
+
+        
         existing.setEndDate(updated.getEndDate());
         existing.setActive(updated.getActive());
         existing.setBranchId(updated.getBranchId());

@@ -17,6 +17,7 @@ import com.trinity.manneger_control.entity.ClassRoom;
 import com.trinity.manneger_control.repository.AlunoRepository;
 import com.trinity.manneger_control.repository.AttendanceRepository;
 import com.trinity.manneger_control.repository.ClassRoomRepository;
+import com.trinity.manneger_control.utils.AttendanceVerify;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,8 +28,16 @@ public class AttendanceServiceImpl {
     private final AttendanceRepository attendanceRepository;
     private final AlunoRepository alunoRepository;
     private final ClassRoomRepository classRoomRepository;
+    private final AttendanceVerify attendanceVerify;
 
     public CheckInDto checkIn(Long alunoId, Long classRoomId) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        ClassRoom classRoom = classRoomRepository.findById(classRoomId)
+                .orElseThrow(() -> new RuntimeException("ClassRoom not found"));
+
+        attendanceVerify.verifyMatchStudentAndClassRoom(aluno, classRoom);
 
         Attendance attendance = attendanceRepository
                 .findByAlunoIdAndClassRoomId(alunoId, classRoomId)
@@ -40,6 +49,9 @@ public class AttendanceServiceImpl {
                     classRoomId,
                     "Attendance already checked in");
         }
+
+        aluno.setTotalAulasGraduacao(aluno.getTotalAulasGraduacao() + 1);
+        alunoRepository.save(aluno);
 
         attendance.setStatus(AttendanceStatus.PRESENT);
         attendance.setCheckInTime(LocalDateTime.now());
@@ -60,7 +72,7 @@ public class AttendanceServiceImpl {
         ClassRoom classRoom = classRoomRepository.findById(request.getClassRoomId())
                 .orElseThrow(() -> new RuntimeException("Class room not found"));
 
-        validateCheckIn(aluno, classRoom);
+        attendanceVerify.verifyMatchStudentAndClassRoom(aluno, classRoom);
 
         Attendance attendance = Attendance.builder()
                 .alunoId(aluno.getId())
@@ -72,27 +84,6 @@ public class AttendanceServiceImpl {
         attendanceRepository.save(attendance);
 
         return mapToResponse(attendance);
-    }
-
-    private void validateCheckIn(Aluno aluno, ClassRoom classRoom) {
-
-        if (classRoom.getCancelled()) {
-            throw new RuntimeException("Class cancelled");
-        }
-
-        if (!aluno.getAtivo()) {
-            throw new RuntimeException("Student inactive");
-        }
-
-        if (!aluno.getBranchId().equals(classRoom.getBranchId())) {
-            throw new RuntimeException("Student does not belong to the branch of the class");
-        }
-
-        attendanceRepository
-                .findByAlunoIdAndClassRoomId(aluno.getId(), classRoom.getId())
-                .ifPresent(a -> {
-                    throw new RuntimeException("Attendance already checked in");
-                });
     }
 
     private AttendanceResponse mapToResponse(Attendance attendance) {

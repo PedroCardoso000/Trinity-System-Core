@@ -1,6 +1,5 @@
 package com.trinity.manneger_control.service;
 
-import com.trinity.manneger_control.domain.AttendanceStatus;
 import com.trinity.manneger_control.domain.dto.ResponseResult;
 import com.trinity.manneger_control.entity.Attendance;
 import com.trinity.manneger_control.entity.ClassRoom;
@@ -9,11 +8,11 @@ import com.trinity.manneger_control.interfaces.ClassRoomInterface;
 import com.trinity.manneger_control.repository.AttendanceRepository;
 import com.trinity.manneger_control.repository.ClassRoomRepository;
 import com.trinity.manneger_control.repository.ClassScheduleRepository;
+import com.trinity.manneger_control.utils.ClassScheduleVerify;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,7 @@ public class ClassRoomServiceImpl implements ClassRoomInterface {
     private final ClassRoomRepository classRoomRepository;
     private final AttendanceRepository attendanceRepository;
     private final ClassScheduleRepository classScheduleRepository;
+    private final ClassScheduleVerify classScheduleVerify;
 
     private record Key(Long scheduleId, LocalDateTime dateTime) {
     }
@@ -64,13 +64,15 @@ public class ClassRoomServiceImpl implements ClassRoomInterface {
     public ResponseEntity<ResponseResult> classRoomCreateOrVerify(Long scheduleId, Long alunoId, LocalDateTime dateTime,
             Long branchId, Long academicId) {
 
+        classScheduleVerify.verifiyClassSchedule(scheduleId, dateTime, branchId, academicId);
+
         ClassRoom classRoom = getOrCreateRealClassRoom(
                 scheduleId, dateTime, branchId, academicId);
 
         if (classRoom.getCancelled()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseResult(false, "Class cancelled"));
         }
-        
+
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ResponseResult(true, "Class checked in successfully"));
     }
@@ -182,4 +184,5 @@ public class ClassRoomServiceImpl implements ClassRoomInterface {
                     return classRoomRepository.save(newCr);
                 });
     }
+
 }
